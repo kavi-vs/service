@@ -1,0 +1,86 @@
+plugins {
+    id 'java'
+    id 'application'
+    id 'com.github.johnrengelman.shadow' version '1.2.3'
+    id 'org.jetbrains.kotlin.jvm' version '1.3.0'
+    id 'org.jetbrains.kotlin.plugin.spring' version '1.3.0'
+}
+apply plugin: 'kotlin-kapt'
+
+
+repositories {
+    jcenter()
+    jcenter { url "https://dl.bintray.com/kavi/vs" }
+}
+ext {
+    // Vertx版本
+    VERTX_VERSION = "3.8.2"
+    VS_CORE_VERSION = '3.2.0'
+    VS_WEB_VERSION = '3.0.8'
+    VS_MYBATIS_VERSION = '1.0.2'
+
+    CLUSTER_MANAGER = '1.2.1'
+
+}
+dependencies {
+    compile "tech.kavi:vs-core:$VS_CORE_VERSION"
+    compile "tech.kavi:vs-web:$VS_WEB_VERSION"
+    compile "tech.kavi:vs-mybatis:$VS_MYBATIS_VERSION"
+    /* Consul集群管理器 */
+    compile "io.reactiverse:consul-cluster-manager:$CLUSTER_MANAGER"
+    compile "io.vertx:vertx-consul-client:$VERTX_VERSION"
+    /* Mongo */
+    compile "io.vertx:vertx-mongo-client:$VERTX_VERSION"
+    /* Mysql */
+    compile "io.vertx:vertx-mysql-postgresql-client:$VERTX_VERSION"
+    /* 数据请求校验工具 */
+    compile "io.vertx:vertx-web-api-contract:$VERTX_VERSION"
+    
+    compile "io.vertx:vertx-codegen:$VERTX_VERSION"
+    kapt "io.vertx:vertx-codegen:$VERTX_VERSION:processor"
+
+}
+
+
+/**
+ * 主启动类
+ * */
+mainClassName = "kavi.tech.service.MainVerticle"
+shadowJar {
+    classifier = 'fat'
+    mergeServiceFiles {
+        include 'META-INF/services/io.vertx.core.spi.VerticleFactory'
+    }
+}
+sourceCompatibility = '1.8'
+
+
+/**
+ * 设置打包目录
+ * */
+sourceSets{
+    generated.java {
+        srcDir file("build/generated/source/kapt/main")
+    }
+    main.java.srcDirs += generated.java.srcDirs
+}
+
+compileKotlin {
+    kotlinOptions.jvmTarget = sourceCompatibility
+}
+compileTestKotlin {
+    kotlinOptions.jvmTarget = sourceCompatibility
+}
+
+compileJava {
+    targetCompatibility = sourceCompatibility
+    sourceCompatibility = sourceCompatibility
+}
+
+
+task wrapper(type: Wrapper) {
+    gradleVersion = '4.0'
+}
+tasks.withType(JavaCompile){
+    options.encoding = "UTF-8"
+}

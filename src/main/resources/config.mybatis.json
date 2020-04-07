@@ -1,0 +1,16 @@
+{
+  "mybatis": [
+    {
+      "name":"db1",
+      "mapperLocations": ["classpath:mapper/*"],
+      "basePackage": ["kavi.tech.service.mybatis.mapper"],
+      "typeAliasesPackage": ["kavi.tech.service.mybatis.entity"],
+      "dataSource": {
+        "url": "jdbc:mysql://localhost:3306/pms?characterEncoding=UTF-8&serverTimezone=UTC",
+        "username": "root",
+        "password": "208772",
+        "driverClass": "com.mysql.jdbc.Driver"
+      }
+    }
+  ]
+}
