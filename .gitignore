@@ -5,4 +5,4 @@
 .vertx
 build
 out
-config.json
+/config.json
