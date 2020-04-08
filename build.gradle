@@ -5,8 +5,13 @@ plugins {
     id 'org.jetbrains.kotlin.jvm' version '1.3.0'
     id 'org.jetbrains.kotlin.plugin.spring' version '1.3.0'
 }
+<<<<<<< HEAD
 apply plugin: 'kotlin-kapt'
 
+=======
+
+apply plugin: 'kotlin-kapt'
+>>>>>>> init
 
 repositories {
     jcenter()
@@ -23,9 +28,18 @@ ext {
 
 }
 dependencies {
+<<<<<<< HEAD
     compile "tech.kavi:vs-core:$VS_CORE_VERSION"
     compile "tech.kavi:vs-web:$VS_WEB_VERSION"
     compile "tech.kavi:vs-mybatis:$VS_MYBATIS_VERSION"
+=======
+
+    compile "tech.kavi:vs-core:$VS_CORE_VERSION"
+    compile "tech.kavi:vs-web:$VS_WEB_VERSION"
+    compile "tech.kavi:vs-mybatis:$VS_MYBATIS_VERSION"
+    /* Ignite 集群服务 */
+    compile "io.vertx:vertx-ignite:$VERTX_VERSION"
+>>>>>>> init
     /* Consul集群管理器 */
     compile "io.reactiverse:consul-cluster-manager:$CLUSTER_MANAGER"
     compile "io.vertx:vertx-consul-client:$VERTX_VERSION"
@@ -35,12 +49,32 @@ dependencies {
     compile "io.vertx:vertx-mysql-postgresql-client:$VERTX_VERSION"
     /* 数据请求校验工具 */
     compile "io.vertx:vertx-web-api-contract:$VERTX_VERSION"
+<<<<<<< HEAD
     
     compile "io.vertx:vertx-codegen:$VERTX_VERSION"
     kapt "io.vertx:vertx-codegen:$VERTX_VERSION:processor"
 
 }
 
+=======
+    /* 微服务工具 */
+    compile "io.vertx:vertx-service-proxy:$VERTX_VERSION"
+    // 生成前端JS微服务接口文件
+    // compile "io.vertx:vertx-sockjs-service-proxy:$VERTX_VERSION"
+    compile "io.vertx:vertx-codegen:$VERTX_VERSION"
+    kapt "io.vertx:vertx-codegen:$VERTX_VERSION:processor"
+
+    implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk8"
+    testCompile group: 'junit', name: 'junit', version: '4.12'
+
+}
+/**
+ * 关联kapt生成的微服务接口实体类
+ * */
+sourceSets{
+    main.java.srcDirs += [file("build/generated/source/kapt/main")]
+}
+>>>>>>> init
 
 /**
  * 主启动类
@@ -54,6 +88,7 @@ shadowJar {
 }
 sourceCompatibility = '1.8'
 
+<<<<<<< HEAD
 
 /**
  * 设置打包目录
@@ -65,17 +100,23 @@ sourceSets{
     main.java.srcDirs += generated.java.srcDirs
 }
 
+=======
+>>>>>>> init
 compileKotlin {
     kotlinOptions.jvmTarget = sourceCompatibility
 }
 compileTestKotlin {
     kotlinOptions.jvmTarget = sourceCompatibility
 }
+<<<<<<< HEAD
 
+=======
+>>>>>>> init
 compileJava {
     targetCompatibility = sourceCompatibility
     sourceCompatibility = sourceCompatibility
 }
+<<<<<<< HEAD
 
 
 task wrapper(type: Wrapper) {
@@ -84,3 +125,21 @@ task wrapper(type: Wrapper) {
 tasks.withType(JavaCompile){
     options.encoding = "UTF-8"
 }
+=======
+tasks.withType(JavaCompile){
+    options.encoding = "UTF-8"
+}
+
+// for java version codegen
+/*/task annotationProcessing(type: JavaCompile, group: 'build') { // codegen
+    source = sourceSets.main.kotlin
+    classpath = configurations.compile + configurations.compileOnly
+    destinationDir = project.file('src/main/generated')
+    options.compilerArgs = [
+            "-proc:only",
+            "-processor", "io.vertx.codegen.CodeGenProcessor",
+            "-AoutputDirectory=${project.projectDir}/src/main"
+    ]
+}
+*/
+>>>>>>> init

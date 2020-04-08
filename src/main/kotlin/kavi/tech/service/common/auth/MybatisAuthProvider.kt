@@ -3,7 +3,6 @@ package kavi.tech.service.common.auth
 import io.vertx.core.AsyncResult
 import io.vertx.core.Future
 import io.vertx.core.Handler
-import io.vertx.core.Vertx
 import io.vertx.core.json.JsonObject
 import io.vertx.ext.auth.AuthProvider
 import io.vertx.ext.auth.User
@@ -11,7 +10,6 @@ import io.vertx.ext.web.handler.impl.HttpStatusException
 import kavi.tech.service.common.strategry.HashStrategy
 import kavi.tech.service.mysql.dao.UserDao
 import org.springframework.beans.factory.annotation.Autowired
-import org.springframework.beans.factory.annotation.Qualifier
 import org.springframework.stereotype.Service
 import tech.kavi.vs.core.VertxBeansBase.Companion.value
 import javax.security.sasl.AuthenticationException

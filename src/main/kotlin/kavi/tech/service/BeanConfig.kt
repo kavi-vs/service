@@ -43,7 +43,8 @@ class BeanConfig : VertxBeans() {
     override fun vertxOptions(options: VertxOptions, vertxOptionsJson: JsonObject?): VertxOptions {
         val discoveryConfig = vertxOptionsJson.value<JsonObject>("discovery")
         if (options.eventBusOptions.isClustered && discoveryConfig != null) {
-            options.clusterManager = ConsulClusterManager(discoveryConfig)
+            // 测试本地使用Ignite做集群
+            // options.clusterManager = ConsulClusterManager(discoveryConfig)
         }
         return options
     }

@@ -57,7 +57,7 @@ class UserDao  @Autowired constructor(
         }
         return this.one(sql){ conn, result ->
             when(result != null && result.rows.isNotEmpty()) {
-                true -> Single.error(IllegalAccessError("Username are already exist"))
+                true -> Single.error<User>(IllegalAccessError("Username are already exist"))
                 else -> insert(conn, user)
             }
         }

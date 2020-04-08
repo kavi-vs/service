@@ -7,6 +7,7 @@ import io.vertx.core.logging.LoggerFactory;
 import io.vertx.ext.web.Router;
 import io.vertx.ext.web.handler.BodyHandler;
 import kavi.tech.service.http.HttpController;
+import kavi.tech.service.ms.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.annotation.ComponentScan;
@@ -37,13 +38,27 @@ public class ApplicationVerticle extends LauncherVerticle {
         router.route().handler(BodyHandler.create());
         httpController.create(router, "/http");
 
-        Integer port = 80;
-        try {
-            port = config.getInteger("HTTP.PORT");
-        } catch (Exception e) {
-            logger.error(e);
-        }
-        vertx.createHttpServer().requestHandler(router).listen(port);
+        /**
+         * 服务代理方式获取数据
+         * */
+        UserService.Factory.create(vertx).list(new JsonObject(), it -> {
+            if (it.succeeded()) {
+                logger.info(it.result());
+            } else {
+                logger.error(it.cause());
+            }
+        });
+
+
+        Integer port = config.getInteger("HTTP.PORT");
+        port = port != null ? port : 80;
+        vertx.createHttpServer().requestHandler(router).listen(port, ar -> {
+            if (ar.succeeded()) {
+                logger.info("Success create http server port:" + ar.result().actualPort());
+            } else {
+                logger.error(ar.cause());
+            }
+        });
     }
 
     public static void main(String[] args ) {
